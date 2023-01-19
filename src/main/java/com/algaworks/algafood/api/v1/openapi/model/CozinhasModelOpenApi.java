@@ -1,0 +1,26 @@
+package com.algaworks.algafood.api.v1.openapi.model;
+
+import com.algaworks.algafood.api.v1.model.objectmodel.CozinhaModel;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.hateoas.Links;
+
+import java.util.List;
+
+@ApiModel("CozinhasModell")
+@Setter
+@Getter
+public class CozinhasModelOpenApi {// (19.41) PagedModel nao extende mais isso: extends PagedModelOpenApi<CozinhaModel> {
+
+    private CozinhaEmbeddedModelOpenApi _embedded;
+    private Links _links;
+    private PageModelOpenApi page;
+
+    @ApiModel("CozinhasEmbeddedModell")
+    @Data
+    public class CozinhaEmbeddedModelOpenApi{
+        private List<CozinhaModel> cozinhas;
+    }
+}

@@ -1,0 +1,26 @@
+package com.algaworks.algafood.core.security.authorizationserver;
+
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+
+import java.util.HashMap;
+
+// 23.16: classe que permite customizacao do token
+public class JwtCustomClaimsTokenEnhancer implements TokenEnhancer {
+
+    @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) { //consegue o Authuser dentro desse segundo arg
+        if (oAuth2Authentication.getPrincipal() instanceof AuthUser) { // pois nem sempre será  AuthUser. por exemplo, fluxo client credentials
+            var authUser = (AuthUser) oAuth2Authentication.getPrincipal(); // retorna object, mas na verdade será um AuthUser devido a configuracao em JpaUserDetailsService.loadUserByUsername
+            var info = new HashMap<String, Object>();
+            info.put("nome_completo", authUser.getFullName());
+            info.put("usuario_id", authUser.getUserId());
+
+            var defaultOAuth2AccessToken = (DefaultOAuth2AccessToken) oAuth2AccessToken; // a implementacao default é esse objecto. Faco isso pra setar clains (linha abaixo)
+            defaultOAuth2AccessToken.setAdditionalInformation(info);
+        }
+        return oAuth2AccessToken;
+    }
+}
