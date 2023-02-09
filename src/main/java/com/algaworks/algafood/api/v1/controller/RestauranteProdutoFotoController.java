@@ -2,10 +2,10 @@ package com.algaworks.algafood.api.v1.controller;
 
 // poderia tranquilamente por em ProdutoController ao inves de fazer esse novo controller aqui
 
+import com.algaworks.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.FotoProdutoModel;
 import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
-import com.algaworks.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
@@ -107,9 +107,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // parametros da requisicao (form-data) nao requerem @RequestBody
-    public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable long produtoId, @Valid FotoProdutoInput fotoProdutoInput, @RequestPart(required = true) MultipartFile arquivo) throws IOException {
+    public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
         Produto produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
-       // MultipartFile arquivo = fotoProdutoInput.getArquivo(); //comentado aqui, e inserido nos arg do metodo gracas a enviar fotos via swagger (ver aula 18.36)
+        MultipartFile arquivo = fotoProdutoInput.getArquivo(); // 18.36: havia sido comentado aqui, e inserido nos arg do metodo gracas a enviar fotos via swagger. Mas agora (26.23), foi trazido de volta
         FotoProduto foto = new FotoProduto();
         foto.setProduto(produto);
         foto.setDescricao(fotoProdutoInput.getDescricao());

@@ -1,12 +1,12 @@
 package com.algaworks.algafood.api.v1.controller;
 
+import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
+import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.AtualizarSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.UsuarioModel;
 import com.algaworks.algafood.api.v1.openapi.controller.UsuarioControllerOpenApi;
-import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
-import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;

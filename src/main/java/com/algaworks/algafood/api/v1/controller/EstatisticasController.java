@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.v1.controller;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.model.filter.VendaDiariaFilter;
+import com.algaworks.algafood.api.v1.openapi.controller.EstatisticasControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/estatisticas")
-public class EstatisticasController
+public class EstatisticasController implements EstatisticasControllerOpenApi
 {
 
     @Autowired

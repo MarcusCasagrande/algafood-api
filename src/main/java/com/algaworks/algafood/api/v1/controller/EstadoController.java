@@ -1,10 +1,11 @@
 package com.algaworks.algafood.api.v1.controller;
 
 
-import com.algaworks.algafood.api.v1.model.input.EstadoInput;
-import com.algaworks.algafood.api.v1.model.objectmodel.EstadoModel;
 import com.algaworks.algafood.api.v1.assembler.EstadoInputDisassembler;
 import com.algaworks.algafood.api.v1.assembler.EstadoModelAssembler;
+import com.algaworks.algafood.api.v1.model.input.EstadoInput;
+import com.algaworks.algafood.api.v1.model.objectmodel.EstadoModel;
+import com.algaworks.algafood.api.v1.openapi.controller.EstadoControllerOpenApi;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController // (já inclui @Controller e @ResponseBody)
 @RequestMapping("/v1/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoRepository estadoRepository;

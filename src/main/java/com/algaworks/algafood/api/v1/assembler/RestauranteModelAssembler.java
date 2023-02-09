@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.v1.assembler;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
-import com.algaworks.algafood.api.v1.model.objectmodel.RestauranteModel;
 import com.algaworks.algafood.api.v1.controller.RestauranteController;
+import com.algaworks.algafood.api.v1.model.objectmodel.RestauranteModel;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;

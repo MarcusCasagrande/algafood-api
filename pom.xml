@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.8</version>
+		<version>2.7.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.algaworks</groupId>
@@ -21,9 +21,13 @@
 		<springfox.version>3.0.0</springfox.version>
 		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
 		<oauth2-oidc-sdk.version>6.21.2</oauth2-oidc-sdk.version>
-		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
-		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
+		<!-- 27.2: Trocando para Spring Authoriztion Server
+		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
+		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version> //SAS ja carrega as lib do JWT sozinho
+		-->
+		<springauthserver.version>0.3.1</springauthserver.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
+		<springdoc.version>1.6.9</springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -64,10 +68,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
-<!--		<dependency>-->  <!-- usar caso a versao do spring usada seja superior a 2.7 -->
-<!--			<groupId>org.flywaydb</groupId>-->
-<!--			<artifactId>flyway-mysql</artifactId>-->
-<!--		</dependency>-->
+		<dependency>  <!-- usar caso a versao do spring usada seja superior a 2.7 -->
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -86,6 +90,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- 26.2: removendo pra usar springDoc
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
@@ -93,13 +98,14 @@
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
-			<artifactId>springfox-bean-validators</artifactId> <!-- pro springfox usar as validacoes dos bean (@Notblank) pra confirmar sua obrigatoriedade no SwaggerUi-->
+			<artifactId>springfox-bean-validators</artifactId>  pro springfox usar as validacoes dos bean (@Notblank) pra confirmar sua obrigatoriedade no SwaggerUi
 			<version>${springfox.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId> <!-- Server apenas pra fazer com que o SwaggerUI reconheca o tipo OffsetDateTime (ver aula 18.14)-->
+			<artifactId>jackson-datatype-jsr310</artifactId>  Server apenas pra fazer com que o SwaggerUI reconheca o tipo OffsetDateTime (ver aula 18.14)
 		</dependency>
+		-->
 		<dependency> <!-- pra usar ExceptionUtils -->
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -151,7 +157,8 @@
 			<artifactId>oauth2-oidc-sdk</artifactId>
 			<version>${oauth2-oidc-sdk.version}</version>
 		</dependency>
-		<dependency> <!-- 23.41: adicionando JWT  e OAUTH2 nesse projeto que agora será o auth server junto-->
+		<!-- 27.2: Trocando para Spring Authoriztion Server
+		<dependency>  //23.41: adicionando JWT  e OAUTH2 nesse projeto que agora será o auth server junto
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
 			<version>${spring-security-oauth2.version}</version>
@@ -161,9 +168,40 @@
 			<artifactId>spring-security-jwt</artifactId>
 			<version>${spring-security-jwt.version}</version>
 		</dependency>
+	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!-- 24.20: essas duas dependencias sao para armazenar sessao no servidor redis ao inves de in-memory -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+		<!-- 26.3: SpringDoc stuff -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-hateoas</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>${springauthserver.version}</version>
 		</dependency>
 	</dependencies>
 

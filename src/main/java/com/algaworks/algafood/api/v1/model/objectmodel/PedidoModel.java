@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.v1.model.objectmodel;
 
 import com.algaworks.algafood.domain.model.StatusPedido;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
@@ -14,36 +14,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Relation(collectionRelation = "LosPedidos")
-@ApiModel(value = "Um Pedido", description = "Representa informacoes de um pedido") // faz com que na documentacao, essa reprsentacoa mude de nome
 @Getter
 @Setter
 public class PedidoModel extends RepresentationModel<PedidoModel> {
 
-    @ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
+    @Schema(example = "UUID")
     private String codigo;
 
-    @ApiModelProperty(example = "35.2")
+    @Schema(example = "40.00")
     private BigDecimal subtotal;
 
-    @ApiModelProperty(example = "3.2", value = "frete do pedido")
+    @Schema(example = "1.50")
     private BigDecimal taxaFrete;
 
-    @ApiModelProperty(example = "38.4", value = "Valor dos itens + o frete")
+    @Schema(example = "41.50")
     private BigDecimal valorTotal;
 
-    @ApiModelProperty(example = "CRIADO")
+    @Schema(example = "CRIADO")
     private StatusPedido status;
 
-    @ApiModelProperty(example = "2019-12-01T20:34:04Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime dataCriacao;
 
-    @ApiModelProperty(example = "2019-12-01T20:34:04Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime dataConfirmacao;
 
-    @ApiModelProperty(example = "2019-12-01T20:34:04Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime dataCancelamento;
 
-    @ApiModelProperty(example = "2019-12-01T20:34:04Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime dataEntrega;
 
     private FormaPagamentoModel formaPagamento;

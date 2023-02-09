@@ -10,7 +10,13 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3306:3306"
+      - "13306:3306"
+    # ver explicacao das ports na aula 25.3: api ainda sobe e usa o mysql na porta 3306, mas o workbench vai usar a 13306
+    networks:
+      - algafood-network
+
+  algafood-redis:
+    image: redis:6.2.1-alpine
     networks:
       - algafood-network
 
@@ -20,7 +26,11 @@ services:
     command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: algafood-mysql
-  # 24.15: remove portas pra poder levantar mais de 1 instancia sem conflitar as portas
+      # 24.20: variabvel de ambiente
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: algafood-redis
+      SPRING_PROFILES_ACTIVE: development
+    # 24.15: remove portas pra poder levantar mais de 1 instancia sem conflitar as portas
   #  ports:
   #   - "8080:8080"
     networks:

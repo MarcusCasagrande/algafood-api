@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.v1.model.input;
 
-import com.algaworks.algafood.core.validation.FileContentType;
-import com.algaworks.algafood.core.validation.FileSize;
-import io.swagger.annotations.ApiModelProperty;
+import com.algaworks.algafood.core.storage.validation.FileContentType;
+import com.algaworks.algafood.core.storage.validation.FileSize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.MediaType;
@@ -15,13 +15,13 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class FotoProdutoInput {
 
-    @ApiModelProperty(value = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)", hidden = true) // hiiden devido a aula 18.36 (enviar fotos via swager)
+    @Schema(description = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)")
     @NotNull
     @FileSize(max = "500KB") // validacao podia ser definida no app.properties tbm (ver la)
     @FileContentType(allowed = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     private MultipartFile arquivo;
 
-    @ApiModelProperty(value = "Descrição da foto do produto", required = true)
+    @Schema(example = "Foto de uma bisteca")
     @NotBlank
     private String descricao;
 }

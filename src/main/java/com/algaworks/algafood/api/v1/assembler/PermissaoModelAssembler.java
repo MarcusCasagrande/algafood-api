@@ -1,14 +1,13 @@
 package com.algaworks.algafood.api.v1.assembler;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
-import com.algaworks.algafood.api.v1.model.objectmodel.PermissaoModel;
 import com.algaworks.algafood.api.v1.controller.PermissaoController;
+import com.algaworks.algafood.api.v1.model.objectmodel.PermissaoModel;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Permissao;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 

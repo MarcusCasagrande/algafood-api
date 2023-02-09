@@ -1,49 +1,39 @@
 package com.algaworks.algafood.api.v1.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
-import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
-import com.algaworks.algafood.api.v1.model.objectmodel.CozinhaModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.algaworks.algafood.core.springdoc.PageableParameter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
-
-@Api(tags = "Cozinhaas")
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Cozinhas", description = "Gerencia as cozinhas")
 public interface CozinhaControllerOpenApi<T, S> {
 
-    @ApiOperation("Lista as cozinhas com paginação")
-    public PagedModel<T> listar(Pageable pageable);
 
-    @ApiOperation("Busca uma cozinha por ID")
-    @ApiResponses({ // adiciona esses codigos de retorno ao metodo no SwaggerUI
-            @ApiResponse(responseCode = "400", description  = "ID da cozinha inválido", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description  = "Cozinha não encontrada", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    public T buscar(@ApiParam(value = "Id de uma cozinnha", example = "22", required = true) Long id);
+    @PageableParameter
+    @Operation(summary = "Lista as cozinhas com paginação")
+    public PagedModel<T> listar(@Parameter(hidden = true) Pageable pageable);
 
-    @ApiOperation("Cadastra uma cozinha")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description  = "Cozinha cadastrada") //response nao precisa definir content, pois o metodo ja define que é o CidadeModel
-    })
-    public T adicionar(@ApiParam(name = "corpoCoz", value = "Representacao de uma nova cozinha", required = true)S cozinhaInput);
+    @Operation(summary = "Busca um cozinha por ID", description = "Cadastro de um grupo de usuário")
+    public T buscar(@Parameter(description = "ID de uma cozinha", example = "1", required = true) Long id);
 
-    @ApiOperation("Atualiza cozinha pelo ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description  = "Cozinha atualizada"),
-            @ApiResponse(responseCode = "404", description  = "Cozinha não encontrada", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    public T atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) long id, @ApiParam(name = "corpoCoz", value = "Representação de uma nova cozinha") S cozinhaInput);
+    @Operation(summary = "Cadastra uma cozinha", description = "Cadastro de uma cozinha nova")
+    public T adicionar(@RequestBody(description = "Representacao de uma nova cozinha", required = true) S cozinhaInput);
 
-    @ApiOperation("Exclui cozinha")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description  = "Cozinha excluida"),
-            @ApiResponse(responseCode = "404", description  = "Cozinha não encontrada", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    public void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long id);
+    @Operation(summary = "Atualiza uma cozinha por ID", description = "Atualiza Cozinha por ID de novo")
+    public T atualizar(@Parameter(description = "ID de uma cozinha", example = "1", required = true) long id, @RequestBody(description = "Representacao de uma nova cozinha", required = true) S cozinhaInput);
+
+    @Operation(summary = "Remove uma cozinha por ID", description = "É o que diz no sumario, bicho")
+    public void remover(@Parameter(description = "ID de uma cozinha", example = "1", required = true) Long id);
 }

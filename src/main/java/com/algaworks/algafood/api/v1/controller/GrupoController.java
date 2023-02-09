@@ -1,10 +1,10 @@
 package com.algaworks.algafood.api.v1.controller;
 
+import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
+import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.GrupoInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.GrupoModel;
 import com.algaworks.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
-import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
-import com.algaworks.algafood.api.v1.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.repository.GrupoRepository;

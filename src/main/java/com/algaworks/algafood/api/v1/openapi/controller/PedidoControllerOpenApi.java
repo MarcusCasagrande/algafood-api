@@ -5,39 +5,55 @@ import com.algaworks.algafood.api.v1.model.filter.PedidoFilter;
 import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.PedidoModel;
 import com.algaworks.algafood.api.v1.model.objectmodel.PedidoResumoModel;
-import io.swagger.annotations.*;
+import com.algaworks.algafood.core.springdoc.PageableParameter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
-@Api(tags = "Peedidos")
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Pedidos", description = "Gerencia os pedidos dos users")
 public interface PedidoControllerOpenApi {
 
-    @ApiImplicitParams({ // indica que tem o param "campos" nesse metodo. Pois o Squilly trabalha com isso.
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string") //paramtype = query é o que vem nos query da url
-    })
-    @ApiOperation("Lista todos os pedidos baseado nos filtros explicitqdos")
-    public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
+
+    @PageableParameter
+    @Operation(
+            summary = "Pesquisa os pedidos", description = "Lista os pedidos pagináveis com base num conjunto de filtros",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY, name = "clienteId",
+                            description = "ID do cliente para filtro da pesquisa",
+                            example = "1", schema = @Schema(type = "integer")),
+                    @Parameter(in = ParameterIn.QUERY, name = "restauranteId",
+                            description = "ID do restaurante para filtro da pesquisa",
+                            example = "1", schema = @Schema(type = "integer")),
+                    @Parameter(in = ParameterIn.QUERY, name = "dataCriacaoInicio",
+                            description = "Data/hora de criação inicial para filtro da pesquisa",
+                            example = "2019-12-01T00:00:00Z", schema = @Schema(type = "string", format = "date-time")),
+                    @Parameter(in = ParameterIn.QUERY, name = "dataCriacaoFim",
+                            description = "Data/hora de criação final para filtro da pesquisa",
+                            example = "2019-12-02T23:59:59Z", schema = @Schema(type = "string", format = "date-time"))
+            }
+    )
+    public PagedModel<PedidoResumoModel> pesquisar(@Parameter(hidden = true) PedidoFilter filtro, @Parameter(hidden = true) Pageable pageable);
 
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string") //paramtype = query é o que vem nos query da url
+    @Operation(summary = "Busca um pedido por código", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "ID do pedido inválido", content = @Content(schema = @Schema(ref = "Problema"))),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrada", content = @Content(schema = @Schema(ref = "Problema")))
     })
-    @ApiResponses({
-            @ApiResponse(responseCode = "404", description  = "Pedido não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    @ApiOperation("Buscar pedido por codigo UUID")
-    public PedidoModel buscar(@ApiParam(example = "f9981ca4-5a5e-4da3-af04-933861df3e55 (UUID)", value = "Código do pedido", required = true) String codigoPedido);
+    public PedidoModel buscar(@Parameter(description = "UUID de um pedido", example = "18f8e7ba-a378-11ed-a8fc-0242ac120002", required = true) String codigoPedido);
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description  = "Cidade excluida")
+    @Operation(summary = "Cadastra um grupo", responses = {
+            @ApiResponse(responseCode = "201", description = "Pedido cadastrado")
     })
-    @ApiOperation("Registra um pedido")
-
-    public PedidoModel adicionar(@ApiParam(name = "PedidoInputt", value = "Representacao de um pedido", required = true) PedidoInput pedidoInput);
+    public PedidoModel adicionar(@RequestBody(description = "Representa um pedido", required = true) PedidoInput pedidoInput);
 }

@@ -1,50 +1,50 @@
 package com.algaworks.algafood.api.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@ApiModel("Problema") //  faz com que o modelo tenha esse nome no SwaggerUi
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Builder // nao tem construtores. Pra instanciar tem que fazer Problema.builder().<nome do campo>(<valor>)
+@Schema(name = "Problema")
 public class Problem {
 
-    @ApiModelProperty(example = "400", position = 1) // define a posicao (ordem) que as prop aparecem no SwaggerUI
+    @Schema(example = "400")
     private Integer status;
 
-    @ApiModelProperty(example = "2022-10-17T04:29:20.405183Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime timestamp;
 
-    @ApiModelProperty(example = "https://algafood.com.br/dados-invalidos", position = 5)
+    @Schema(example = "https://algafood.com.br/dados-invalidos")
     private String type;
 
-    @ApiModelProperty(example = "Dados inválidos", value = "valor teste")
+    @Schema(example = "Dados inválidos")
     private String title;
 
-    @ApiModelProperty(example = "Um ou mais campos estão inválidos.")
+    @Schema(example = "Um ou mais campos estão inválidos.")
     private String detail;
 
-    @ApiModelProperty(example = "Um ou mais campos estão inválidos.")
+    @Schema(example = "Um ou mais campos estão inválidos.")
     private String userMessage; // <-- extensao, nao é padrao da especificacao. Mensagem para ajudar a informar o usuario final
 
-    @ApiModelProperty(example = "Lista de objetos ou caompos que geraram o erro (opcional)")
+    @Schema(description = "Lista de objetos ou campos que geraram o erro")
     private List<Objects> objects;
 
-    @ApiModel("ObjetoProblema") // nomeia o Schema pro SwaggerUi, e já o torna detectavel para aparecer la (visto que é um tipo interno nessa classe. Até entao nao aparecia como schema proprio la)
+
     @Getter
     @Builder
+    @Schema(name = "ObjetoProblema")
     public static class Objects {
 
-        @ApiModelProperty(example = "preço")
+        @Schema(example = "preço")
         private String name;
 
-        @ApiModelProperty(example = "O preço é obrigatório")
+        @Schema(example = "O preço é inválido")
         private String userMessage;
     }
 }

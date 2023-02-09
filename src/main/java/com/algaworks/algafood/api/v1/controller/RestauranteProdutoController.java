@@ -1,11 +1,11 @@
 package com.algaworks.algafood.api.v1.controller;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
+import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
+import com.algaworks.algafood.api.v1.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.input.ProdutoInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.ProdutoModel;
 import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
-import com.algaworks.algafood.api.v1.assembler.GenericInputDisassembler;
-import com.algaworks.algafood.api.v1.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
@@ -78,7 +78,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 
     @PutMapping("/{produtoId}")
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
-    public ProdutoModel associar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput){
+    @Override
+    public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput){
         Produto p = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
         PID.copyToDomainObject(produtoInput, p);
         return PMA.toModel(cadastroProdutoService.salvar(p));

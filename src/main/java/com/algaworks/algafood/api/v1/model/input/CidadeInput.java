@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.v1.model.input;
 
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +16,8 @@ public class CidadeInput {
     // usar as anotacoes (javax.validation)  da classe do modelo (Restaurante)
 
     //@ApiModelProperty(example = "Içara", required = true) // spirngfox, diz no SwaggerUi que é obrigatorio
-    @ApiModelProperty(example = "Içara", required = true) // @ApiModelProperty tem em sua implementacao um "required() default  = false. Isso substitui o required da implementacao do bean @NotNull e por isso o spring fox nao coloca o "*" vermelho de required no SwaggerUI
     @NotBlank
+    @Schema(example = "Içara", required = true) //26.10: caso nao tenha @NotBlank/@NotNull, o required serve
     private String nome;
 
     @NotNull

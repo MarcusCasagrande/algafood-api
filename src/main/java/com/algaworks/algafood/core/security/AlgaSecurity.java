@@ -23,7 +23,7 @@ public class AlgaSecurity {
 
     public Long getUsuarioId(){
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-        return jwt.getClaim("usuario_id");
+        return Long.parseLong(jwt.getClaim("usuario_id"));
         //resumo de tudo em uma linha:
         // return ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaim("usuario_id");
     }

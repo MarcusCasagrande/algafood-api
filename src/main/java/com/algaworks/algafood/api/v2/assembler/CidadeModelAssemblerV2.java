@@ -1,8 +1,5 @@
 package com.algaworks.algafood.api.v2.assembler;
 
-import com.algaworks.algafood.api.v1.AlgaLinks;
-import com.algaworks.algafood.api.v1.controller.CidadeController;
-import com.algaworks.algafood.api.v1.model.objectmodel.CidadeModel;
 import com.algaworks.algafood.api.v2.AlgaLinksV2;
 import com.algaworks.algafood.api.v2.controller.CidadeControllerV2;
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;

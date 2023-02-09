@@ -1,8 +1,7 @@
 package com.algaworks.algafood.api.v1.model.objectmodel;
 
 import com.algaworks.algafood.domain.model.StatusPedido;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
@@ -13,27 +12,26 @@ import java.time.OffsetDateTime;
 
 @Relation(collectionRelation = "LosPedidosResumo")
 //@JsonFilter("pedidoFilter") // comentado agora, pois to usando squiggly nesta aula
-@ApiModel(value = "ResumoPedido", description = "Representa informacoes de um pedido") // faz com que na documentacao, essa reprsentacoa mude de nome
 @Getter
 @Setter
 public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 
-    @ApiModelProperty(example = "um UUID qualquer")
+    @Schema(example = "um UUID ae")
     private String codigo;
 
-    @ApiModelProperty(example = "35.2")
+    @Schema(example = "14.99")
     private BigDecimal subtotal;
 
-    @ApiModelProperty(example = "3.2")
+    @Schema(example = "2.50")
     private BigDecimal taxaFrete;
 
-    @ApiModelProperty(example = "38.4", value = "Valor dos itens + o frete")
+    @Schema(example = "17.49")
     private BigDecimal valorTotal;
 
-    @ApiModelProperty(example = "CRIADO")
+    @Schema(example = "Confirmado")
     private StatusPedido status;
 
-    @ApiModelProperty(example = "2019-12-01T20:34:04Z")
+    @Schema(example = "2023-01-20T12:00:50.1234567890")
     private OffsetDateTime dataCriacao;
 
     private RestauranteIdNomeModel restaurante;

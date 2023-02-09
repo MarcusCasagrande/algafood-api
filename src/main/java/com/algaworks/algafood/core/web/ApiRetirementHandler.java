@@ -1,6 +1,5 @@
 package com.algaworks.algafood.core.web;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

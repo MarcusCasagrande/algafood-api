@@ -5,42 +5,51 @@ import com.algaworks.algafood.api.v1.model.input.AtualizarSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
 import com.algaworks.algafood.api.v1.model.objectmodel.UsuarioModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 
-@Api(tags = "Usuarios")
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Usuários", description = "Gerencia os usuários")
 public interface UsuarioControllerOpenApi {
 
-
-    @ApiOperation("Lista os usuarios")
+    @Operation(summary = "Lista os usuários", description = "Lista user description")
     public CollectionModel<UsuarioModel> listar();
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "400", description  = "ID do usuario inválido", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description  = "user não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+    @Operation(summary = "Busca um usuário por ID", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "ID do usuário inválido", content = {@Content(schema = @Schema(ref = "Problema")) }),
+            @ApiResponse(responseCode = "404", description = "usuaripo não encontrado", content = {@Content(schema = @Schema(ref = "Problema")) })
     })
-    @ApiOperation("Buscar user by ID")
-    public UsuarioModel buscar(@ApiParam(value = "Código do usuario", example = "1", required = true) Long id);
+    public UsuarioModel buscar(@Parameter(description = "ID de um usuário", example = "1", required = true) Long id);
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description  = "Usuário cadastrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
+    @Operation(summary = "Cadastra um novo usuário", responses = {
+            @ApiResponse(responseCode = "201")
     })
-    @ApiOperation("Cadastra novo user")
-    public UsuarioModel adicionar(UsuarioComSenhaInput usuarioInput);
+    public UsuarioModel adicionar(@RequestBody(description = "Representacao de um usuario com a senha", required = true) UsuarioComSenhaInput usuarioInput);
 
-    @ApiOperation("Atualiza user by ID")
-    public UsuarioModel atualizar( long id, UsuarioInput usuarioInput);
+    @Operation(summary = "Atualiza usuário por ID", responses = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado"),
+            @ApiResponse(responseCode = "404", description = "usuaripo não encontrado", content = {@Content(schema = @Schema(ref = "Problema")) })
+    })
+    public UsuarioModel atualizar(@Parameter(description = "ID de um usuário", example = "1", required = true) long id, @RequestBody(description = "Representacao de um usuário com novos dados", required = true) UsuarioInput usuarioInput);
 
-    @ApiOperation("Atualiza a senha de um usuário")
-    public void atualizarSenha(long id, AtualizarSenhaInput atualizarSenhaInput);
+    @Operation(summary = "Atualiza senha de um usuário", responses = {
+            @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "usuaripo não encontrado", content = {@Content(schema = @Schema(ref = "Problema")) })
+    })
+    public void atualizarSenha(@Parameter(description = "ID de um usuário", example = "1", required = true) long id, @RequestBody(description = "Representacao de uma senha a ser atualizada", required = true) AtualizarSenhaInput atualizarSenhaInput);
 
-
-    @ApiOperation("Remover usuario (que aparenteente nao existe esse metodo nas aulas e eu pus aqui sei la pq)")
-    public void remover(Long id);
+    @Operation(summary = "Remove usuário", responses = {
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "404", description = "usuaripo não encontrado", content = {@Content(schema = @Schema(ref = "Problema")) })
+    })
+    public void remover(@Parameter(description = "ID de um usuário", example = "1", required = true) Long id);
 }

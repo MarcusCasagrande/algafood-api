@@ -1,6 +1,5 @@
 package com.algaworks.algafood.api.v2.assembler;
 
-import com.algaworks.algafood.api.v1.controller.CozinhaController;
 import com.algaworks.algafood.api.v2.AlgaLinksV2;
 import com.algaworks.algafood.api.v2.controller.CozinhaControllerV2;
 import com.algaworks.algafood.api.v2.model.CozinhaModelV2;

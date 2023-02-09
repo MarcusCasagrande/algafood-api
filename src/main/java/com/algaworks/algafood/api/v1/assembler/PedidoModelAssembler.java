@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.v1.assembler;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
-import com.algaworks.algafood.api.v1.model.objectmodel.PedidoModel;
 import com.algaworks.algafood.api.v1.controller.PedidoController;
+import com.algaworks.algafood.api.v1.model.objectmodel.PedidoModel;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;

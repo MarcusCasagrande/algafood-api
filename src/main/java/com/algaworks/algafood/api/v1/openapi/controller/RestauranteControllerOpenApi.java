@@ -6,98 +6,92 @@ import com.algaworks.algafood.api.v1.model.objectmodel.RestauranteBasicoModel;
 import com.algaworks.algafood.api.v1.model.objectmodel.RestauranteIdNomeModel;
 import com.algaworks.algafood.api.v1.model.objectmodel.RestauranteModel;
 import com.algaworks.algafood.api.v1.openapi.model.RestauranteBasicoModelOpenApi;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
-
-@Api(tags = "Restaurantes") // tag pra sair no SwaggerUI. Ver SpringFoxConfig.java
+@SecurityRequirement(name = "security_auth")
+@Tag(name = "Restaurantes", description = "Gerencia os restaurantes")
 public interface RestauranteControllerOpenApi {
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome", // implicit de projecao que permite apenas o valor "apenas-nome". Aula 18.28
-                    name = "projecao", paramType = "query", type = "string")
+    // 26.21: 2 metodos iguais, coloca um endpoint mostrando a projecao "apenas-nome"
+    @Operation(summary = "Lista restaurantes", parameters = {
+        @Parameter(name = "projecao", description = "Nome da projeção", example = "apenas-nome", in = ParameterIn.QUERY, required = false)
     })
-    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class) // usa essa classe como resposta na documentacao
     public CollectionModel<RestauranteBasicoModel> listar();
 
+//    @ApiIgnore // (19.48): faz com que na sessao "schemas" (la embaixo) do swagger, esse tipo (CollectionModel«RestauranteIdNomeModel») nao apareca
 
-    @ApiIgnore // (19.48): faz com que na sessao "schemas" (la embaixo) do swagger, esse tipo (CollectionModel«RestauranteIdNomeModel») nao apareca
-    @ApiOperation(value = "Lista restaurantes", hidden = true) // hidden pois ja tem outro GET com o mesmo caminho. entao este fica oculto no Swagger (e sem o paramentro de projecao ali do JSONView) 18.28
+    @Operation(hidden = true) // redudante nesse caso, acho
     public CollectionModel<RestauranteIdNomeModel> listarApenasNomes();
 
-    @ApiOperation(value = "Busca restaurante por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "400", description  = "ID do restaurante inválido", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+    @Operation(summary = "Busca um restaurante por ID", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "ID do restaurante inválido", content = {
+                    @Content(schema = @Schema(ref = "Problema")) }),
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = {
+                    @Content(schema = @Schema(ref = "Problema")) })
     })
-    public RestauranteModel buscar(@ApiParam(value = "Id de um restaurante", example = "1", required = true) Long id) throws Exception;
+    public RestauranteModel buscar(@Parameter(description = "ID de um restaurante", example = "1", required = true) Long id) throws Exception;
 
-    @ApiOperation("Cadastra um restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description  = "Restaurante cadastrado")
+    @Operation(summary = "Cadastra um restaurante", responses = {
+            @ApiResponse(responseCode = "201", description = "Restaurante cadastrado"),
     })
-    public RestauranteModel adicionar(@ApiParam(name = "coorpor", value = "Representacao de um novo restaurante", required = true) RestauranteInput restauranteInput);
+    public RestauranteModel adicionar(@RequestBody(description = "Representacao de um novo restaurante", required = true) RestauranteInput restauranteInput);
 
-    @ApiOperation("Atualiza restaurante por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description  = "Restaurante atualizado"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+    @Operation(summary = "Atualiza um restaurante por ID", responses = {
+            @ApiResponse(responseCode = "200", description = "Restaurante atualizado"),
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = {
+                    @Content(schema = @Schema(ref = "Problema")) }),
     })
-    public RestauranteModel atualizar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id, @ApiParam(name = "corpoRes", value = "Representação de um novo restaurante", required = true) RestauranteInput restauranteInput);
+    public RestauranteModel atualizar(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id, @RequestBody(description = "Representacao do res a seer atualizado", required = true) RestauranteInput restauranteInput);
 
-    @ApiOperation("Ativar restaurante")
-    @ApiResponses({
+    @Operation(summary = "Ativa um restaurante por ID", responses = {
             @ApiResponse(responseCode = "204", description = "Restaurante ativado com sucesso"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = {
+                    @Content(schema = @Schema(ref = "Problema")) }),
     })
-    public ResponseEntity<Void> ativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id);
+    public ResponseEntity<Void> ativar(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id);
 
-    @ApiOperation("Inativar restaurante")
-    @ApiResponses({
+    @Operation(summary = "Desativa um restaurante por ID", responses = {
             @ApiResponse(responseCode = "204", description = "Restaurante inativado com sucesso"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = {
+                    @Content(schema = @Schema(ref = "Problema")) }),
     })
-    public ResponseEntity<Void> inativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id);
+    public ResponseEntity<Void> inativar(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id);
 
-    @ApiOperation("Fechar restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Restaurante fechado com sucesso"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    public ResponseEntity<Void> fechamento(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id);
+    @Operation(summary = "Atualizar restaurante", description = "Descricao updateRes...")
+    public ResponseEntity<Void> fechamento(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id);
 
-    @ApiOperation("Abrir restaurante por ID")
-    @ApiResponses({
+    @Operation(summary = "Abre um restaurante por ID", responses = {
             @ApiResponse(responseCode = "204", description = "Restaurante aberto com sucesso"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = {
+                    @Content(schema = @Schema(ref = "Problema")) }),
     })
-    public ResponseEntity<Void> abertura(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id);
+    public ResponseEntity<Void> abertura(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id);
 
-    @ApiOperation("Exclui restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description  = "Restaurante excluido"),
-            @ApiResponse(responseCode = "404", description  = "Restaurante não encontrado", content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    public void remover(@ApiParam(value = "ID de um restaurante", example = "1", required = true) long id);
+    @Operation(summary = "Remover restaurante", description = "Descricao updateRes...")
+    public void remover(@Parameter(description = "ID de um restaurante", example = "1", required = true) long id);
 
-    @ApiOperation("Ativa múltiplos restaurantes")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description  = "Restaurantes ativados com sucesso")
+    @Operation(summary = "Ativa múltiplos restaurantes", responses = {
+            @ApiResponse(responseCode = "204", description = "Restaurantes ativados com sucesso"),
     })
-    public void ativarMultiplos(@ApiParam(name = "corpo", value = "IDs de restaurantes", required = true) List<Long> restauranteIds);
+    public void ativarMultiplos(@RequestBody(description = "IDs de restaurantes", required = true) List<Long> restauranteIds);
 
-    @ApiOperation("Inativa múltiplos restaurantes")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description  = "Restaurantes ativados com sucesso")
+    @Operation(summary = "Inativa múltiplos restaurantes", responses = {
+            @ApiResponse(responseCode = "204", description = "Restaurantes ativados com sucesso"),
     })
-    public void inativarMultiplos(@ApiParam(name = "corpo", value = "IDs de restaurantes", required = true) List<Long> restauranteIds);
+    public void inativarMultiplos(@RequestBody(description = "IDs de restaurantes", required = true) List<Long> restauranteIds);
 
 }

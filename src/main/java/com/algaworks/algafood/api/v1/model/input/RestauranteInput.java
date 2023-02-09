@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.v1.model.input;
 
-import com.algaworks.algafood.core.validation.Multiplo;
-import io.swagger.annotations.ApiModelProperty;
+import com.algaworks.algafood.core.storage.validation.Multiplo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,14 +15,15 @@ import java.math.BigDecimal;
 @Setter
 public class RestauranteInput {
 
-    @ApiModelProperty(example = "Thay", required = true)
+
     // usar as anotacoes (javax.validation)  da classe do modelo (Restaurante)
     @NotBlank
+    @Schema(example = "tuc-tuc res")
     private String nome;
 
-    @ApiModelProperty(example = "3.20", required = true)
     @NotNull
     @Multiplo(numero = 5)
+    @Schema(example = "2.50", required = true)
     private BigDecimal taxaFrete;
 
 
